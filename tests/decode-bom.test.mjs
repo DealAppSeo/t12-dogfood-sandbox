@@ -18,6 +18,11 @@ test('UTF-16 little-endian with a byte-order mark', () => {
   assert.equal(decodeText(Buffer.concat([Buffer.from([0xff, 0xfe]), utf16le(TEXT)])), TEXT);
 });
 
+// From GrokCode's challenge G1: a 0xfe lead byte without 0xff after it is not a mark, so it stays UTF-8.
+test('a lone 0xfe lead byte is not a byte-order mark', () => {
+  assert.equal(decodeText(Buffer.from([0xfe, 0x41, 0x42])), '�AB');
+});
+
 test('UTF-16 big-endian with a byte-order mark', () => {
   assert.equal(decodeText(Buffer.concat([Buffer.from([0xfe, 0xff]), utf16be(TEXT)])), TEXT);
 });
